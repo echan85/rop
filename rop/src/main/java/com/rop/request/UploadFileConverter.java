@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-8-1
  */
 package com.rop.request;
@@ -14,24 +14,24 @@ package com.rop.request;
  */
 public class UploadFileConverter implements RopConverter<String, UploadFile> {
 
-    @Override
+
     public UploadFile convert(String source) {
         String fileType = UploadFileUtils.getFileType(source);
         byte[] contentBytes = UploadFileUtils.decode(source);
         return new UploadFile(fileType, contentBytes);
     }
 
-    @Override
+
     public String unconvert(UploadFile target) {
         return UploadFileUtils.encode(target);
     }
 
-    @Override
+
     public Class<String> getSourceClass() {
         return String.class;
     }
 
-    @Override
+
     public Class<UploadFile> getTargetClass() {
         return UploadFile.class;
     }

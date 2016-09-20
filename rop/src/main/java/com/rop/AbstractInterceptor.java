@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-4-26
  */
 package com.rop;
@@ -21,7 +21,7 @@ public abstract class AbstractInterceptor implements Interceptor {
     public void beforeResponse(RopRequestContext ropRequestContext) {
     }
 
-    @Override
+
     public boolean isMatch(RopRequestContext ropRequestContext) {
         return true;
     }

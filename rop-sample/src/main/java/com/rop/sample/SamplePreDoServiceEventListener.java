@@ -10,6 +10,8 @@ import com.rop.event.PreDoServiceEvent;
 import com.rop.event.RopEventListener;
 import com.rop.marshaller.MessageMarshallerUtils;
 
+import java.util.Map;
+
 /**
  * <pre>
  * 功能说明：
@@ -20,17 +22,17 @@ import com.rop.marshaller.MessageMarshallerUtils;
  */
 public class SamplePreDoServiceEventListener implements RopEventListener<PreDoServiceEvent> {
 
-    @Override
+
     public void onRopEvent(PreDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
-        if(ropRequestContext != null && ropRequestContext.getRopRequest() != null){
-            RopRequest ropRequest = ropRequestContext.getRopRequest();
-            String message = MessageMarshallerUtils.getMessage(ropRequest, ropRequestContext.getMessageFormat());
+        if(ropRequestContext != null){
+            Map<String,String> allParams = ropRequestContext.getAllParams();
+            String message = MessageMarshallerUtils.asUrlString(allParams);
             System.out.println("message("+ropEvent.getServiceBeginTime()+")"+message);
         }
     }
 
-    @Override
+
     public int getOrder() {
         return 1;
     }

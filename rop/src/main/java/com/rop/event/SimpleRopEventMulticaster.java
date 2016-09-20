@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-2
  */
 package com.rop.event;
@@ -23,14 +23,14 @@ public class SimpleRopEventMulticaster extends AbstractRopEventMulticaster {
 
     private Executor executor;
 
-    @Override
+
     public void multicastEvent(final RopEvent event) {
         try {
             for (final RopEventListener listener : getRopEventListeners(event)) {
                 Executor executor = getExecutor();
                 if (executor != null) {
                     executor.execute(new Runnable() {
-                        @Override
+
                         public void run() {
                             listener.onRopEvent(event);
                         }

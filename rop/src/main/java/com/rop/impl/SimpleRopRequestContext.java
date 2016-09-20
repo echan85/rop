@@ -60,31 +60,35 @@ public class SimpleRopRequestContext implements RopRequestContext {
 
     private Object rawRequestObject;
 
+    private Object rawResponseObject;
+
     private Map<String, String> allParams;
 
     private String requestId = RopUtils.getUUID();
 
-    @Override
+    private Session session;
+
+
     public long getServiceBeginTime() {
         return this.serviceBeginTime;
     }
 
-    @Override
+
     public long getServiceEndTime() {
         return this.serviceEndTime;
     }
 
-    @Override
+
     public void setServiceBeginTime(long serviceBeginTime) {
         this.serviceBeginTime = serviceBeginTime;
     }
 
-    @Override
+
     public void setServiceEndTime(long serviceEndTime) {
         this.serviceEndTime = serviceEndTime;
     }
 
-    @Override
+
     public String getFormat() {
         return this.format;
     }
@@ -93,13 +97,22 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.format = format;
     }
 
-    @Override
+
     public Object getRawRequestObject() {
         return this.rawRequestObject;
     }
 
+
+    public Object getRawResponseObject() {
+        return this.rawResponseObject;
+    }
+
     public void setRawRequestObject(Object rawRequestObject) {
         this.rawRequestObject = rawRequestObject;
+    }
+
+    public void setRawResponseObject(Object rawResponseObject) {
+        this.rawResponseObject = rawResponseObject;
     }
 
     public SimpleRopRequestContext(RopContext ropContext) {
@@ -108,7 +121,7 @@ public class SimpleRopRequestContext implements RopRequestContext {
     }
 
 
-    @Override
+
     public String getIp() {
         return this.ip;
     }
@@ -117,12 +130,12 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.ip = ip;
     }
 
-    @Override
+
     public RopContext getRopContext() {
         return ropContext;
     }
 
-    @Override
+
     public String getMethod() {
         return this.method;
     }
@@ -131,35 +144,37 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.method = method;
     }
 
-    @Override
+
     public String getSessionId() {
         return this.sessionId;
     }
 
-    @Override
+
     public Session getSession() {
-        if (ropContext != null && ropContext.getSessionManager() != null && getSessionId() != null) {
-            return ropContext.getSessionManager().getSession(getSessionId());
-        } else {
-            return null;
+        if (session == null && ropContext != null &&
+                ropContext.getSessionManager() != null && getSessionId() != null) {
+           session = ropContext.getSessionManager().getSession(getSessionId());
         }
+        return session;
     }
 
-    @Override
+
     public void addSession(String sessionId, Session session) {
+        this.sessionId = sessionId;
+        this.session = session;
         if (ropContext != null && ropContext.getSessionManager() != null) {
             ropContext.getSessionManager().addSession(sessionId, session);
         }
     }
 
-    @Override
+
     public void removeSession() {
         if (ropContext != null && ropContext.getSessionManager() != null) {
             ropContext.getSessionManager().removeSession(getSessionId());
         }
     }
 
-    @Override
+
     public Locale getLocale() {
         return this.locale;
     }
@@ -168,24 +183,14 @@ public class SimpleRopRequestContext implements RopRequestContext {
         return this.serviceMethodHandler;
     }
 
-    @Override
+
     public MessageFormat getMessageFormat() {
         return messageFormat.get();
     }
 
-    @Override
+
     public Object getRopResponse() {
         return this.ropResponse;
-    }
-
-    @Override
-    public RopRequest getRopRequest() {
-        return this.ropRequest;
-    }
-
-    @Override
-    public void setRopRequest(RopRequest ropRequest) {
-        this.ropRequest = ropRequest;
     }
 
     public String getAppKey() {
@@ -204,7 +209,7 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.messageFormat.set(messageFormat);
     }
 
-    @Override
+
     public void setRopResponse(Object ropResponse) {
         this.ropResponse = ropResponse;
     }
@@ -217,7 +222,7 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.appKey = appKey;
     }
 
-    @Override
+
     public String getVersion() {
         return version;
     }
@@ -226,7 +231,7 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.version = version;
     }
 
-    @Override
+
     public String getSign() {
         return sign;
     }
@@ -243,12 +248,12 @@ public class SimpleRopRequestContext implements RopRequestContext {
         return this.mainError;
     }
 
-    @Override
+
     public Object getAttribute(String name) {
         return this.attributes.get(name);
     }
 
-    @Override
+
     public void setAttribute(String name, Object value) {
         this.attributes.put(name, value);
     }
@@ -261,17 +266,17 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.attributes = attributes;
     }
 
-    @Override
+
     public boolean isSignEnable() {
         return ropContext.isSignEnable() && !getServiceMethodDefinition().isIgnoreSign();
     }
 
-    @Override
+
     public ServiceMethodDefinition getServiceMethodDefinition() {
         return serviceMethodHandler.getServiceMethodDefinition();
     }
 
-    @Override
+
     public Map<String, String> getAllParams() {
         return this.allParams;
     }
@@ -280,7 +285,7 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.allParams = allParams;
     }
 
-    @Override
+
     public String getParamValue(String paramName) {
         if (allParams != null) {
             return allParams.get(paramName);
@@ -293,12 +298,12 @@ public class SimpleRopRequestContext implements RopRequestContext {
         this.httpAction = httpAction;
     }
 
-    @Override
+
     public HttpAction getHttpAction() {
         return this.httpAction;
     }
 
-    @Override
+
     public String getRequestId() {
         return this.requestId;
     }

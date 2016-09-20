@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-4
  */
 package com.rop.config;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class InterceptorsBeanDefinitionParser implements BeanDefinitionParser {
 
-    @Override
+
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         CompositeComponentDefinition compDefinition = new CompositeComponentDefinition(element.getTagName(), parserContext.extractSource(element));
         parserContext.pushContainingComponent(compDefinition);

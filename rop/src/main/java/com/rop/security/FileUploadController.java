@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-8-1
  */
 package com.rop.security;
@@ -27,5 +27,17 @@ public interface FileUploadController {
      * @return
      */
     boolean isExceedMaxSize(int fileSize);
+
+    /**
+     * 获取支持上传的文件格式
+     * @return
+     */
+    String getAllowFileTypes();
+
+    /**
+     * 获取最大的文件大小，单位为K
+     * @return
+     */
+    int getMaxSize();
 }
 

@@ -1,8 +1,10 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-8-2
  */
 package com.rop.security;
+
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class DefaultFileUploadController implements FileUploadController {
 
     private List<String> fileTypes;
     
-    private int maxSize;
+    private int maxSize = -1;
 
     private boolean allowAllTypes = false;
 
@@ -29,6 +31,10 @@ public class DefaultFileUploadController implements FileUploadController {
         this.maxSize = maxSize;
     }
 
+    /**
+     * @param fileTypes
+     * @param maxSize 最大文件大小，单位为k
+     */
     public DefaultFileUploadController(List<String> fileTypes, int maxSize) {
         ArrayList<String> tempFileTypes = new ArrayList<String>(fileTypes.size());
         for (String fileType : fileTypes) {
@@ -38,7 +44,7 @@ public class DefaultFileUploadController implements FileUploadController {
         this.maxSize = maxSize;
     }
 
-    @Override
+
     public boolean isAllowFileType(String fileType) {
         if(allowAllTypes){
             return true;
@@ -52,13 +58,34 @@ public class DefaultFileUploadController implements FileUploadController {
         }
     }
 
-    @Override
+
     public boolean isExceedMaxSize(int fileSize) {
         if(maxSize > 0){
             return fileSize > maxSize * 1024;
         }else{
             return false;
         }
+    }
+
+
+    public String getAllowFileTypes() {
+        if (CollectionUtils.isEmpty(fileTypes)) {
+            return "";
+        }else{
+            StringBuilder sb = new StringBuilder();
+            String seprator = "";
+            for (String fileType : fileTypes) {
+                sb.append(seprator);
+                sb.append(fileType);
+                seprator = ",";
+            }
+            return sb.toString();
+        }
+    }
+
+
+    public int getMaxSize() {
+        return this.maxSize;
     }
 }
 

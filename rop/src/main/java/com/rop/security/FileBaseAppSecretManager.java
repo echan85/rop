@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-3-1
  */
 package com.rop.security;
@@ -54,7 +54,7 @@ public class FileBaseAppSecretManager implements AppSecretManager {
         this.appSecretFile = appSecretFile;
     }
 
-    @Override
+
     public boolean isValidAppKey(String appKey) {
         return getSecret(appKey) != null;
     }

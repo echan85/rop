@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-30
  */
 package com.rop.client.unmarshaller;
@@ -25,7 +25,7 @@ public class JacksonJsonRopUnmarshaller implements RopUnmarshaller {
 
     private static ObjectMapper objectMapper;
 
-    @Override
+
     public <T> T unmarshaller(String content, Class<T> objectType) {
         try {
             return getObjectMapper().readValue(content, objectType);

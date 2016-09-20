@@ -4,12 +4,14 @@
  */
 package com.rop.response;
 
+import com.rop.CommonConstant;
 import com.rop.security.MainError;
 import com.rop.security.MainErrorType;
 import com.rop.security.MainErrors;
 import com.rop.security.SubError;
 
 import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +26,9 @@ import java.util.Locale;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "error")
 public class ErrorResponse{
+
+    @XmlAttribute
+    protected String errorToken = CommonConstant.ERROR_TOKEN;
 
     @XmlAttribute
     protected String code;
@@ -82,6 +87,13 @@ public class ErrorResponse{
         this.subErrors = subErrors;
     }
 
+    public void addSubError(SubError subError){
+        if (subErrors == null) {
+            subErrors = new ArrayList<SubError>();
+        }
+        subErrors.add(subError);
+    }
+
     protected MainError getInvalidArgumentsError(Locale locale) {
         return MainErrors.getError(MainErrorType.INVALID_ARGUMENTS, locale);
     }
@@ -90,6 +102,10 @@ public class ErrorResponse{
         setCode(mainError.getCode());
         setMessage(mainError.getMessage());
         setSolution(mainError.getSolution());
+    }
+
+    public String getErrorToken() {
+        return errorToken;
     }
 
     /**

@@ -1,9 +1,10 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-8-2
  */
 package com.rop.response;
 
+import com.rop.RopRequestContext;
 import com.rop.security.MainError;
 import com.rop.security.MainErrorType;
 import com.rop.security.MainErrors;
@@ -28,8 +29,9 @@ public class RejectedServiceResponse extends ErrorResponse  {
     public RejectedServiceResponse() {
     }
 
-    public RejectedServiceResponse(Locale locale) {
-        MainError mainError = MainErrors.getError(MainErrorType.FORBIDDEN_REQUEST, locale);
+    public RejectedServiceResponse(RopRequestContext context) {
+        MainError mainError = MainErrors.getError(MainErrorType.FORBIDDEN_REQUEST, context.getLocale(),
+                                                  context.getMethod(),context.getVersion());
         setMainError(mainError);
     }
 }

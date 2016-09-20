@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-30
  */
 package com.rop.client;
@@ -26,12 +26,12 @@ public class DefaultCompositeResponse<T> implements CompositeResponse {
         this.successful = successful;
     }
 
-    @Override
+
     public ErrorResponse getErrorResponse() {
         return this.errorResponse;
     }
 
-    @Override
+
     public T getSuccessResponse() {
         return this.successRopResponse;
     }
@@ -44,7 +44,7 @@ public class DefaultCompositeResponse<T> implements CompositeResponse {
         this.successRopResponse = successRopResponse;
     }
 
-    @Override
+
     public boolean isSuccessful() {
         return successful;
     }

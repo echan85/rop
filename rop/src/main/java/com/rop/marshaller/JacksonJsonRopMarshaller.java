@@ -11,6 +11,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.io.OutputStream;
 
 /**
  * <pre>
- *    将{@link com.rop.RopResponse}流化成JSON。 {@link ObjectMapper}是线程安全的。
+ *    将响应对象流化成JSON。 {@link ObjectMapper}是线程安全的。
  * </pre>
  *
  * @author 陈雄华
@@ -27,6 +28,7 @@ import java.io.OutputStream;
 public class JacksonJsonRopMarshaller implements RopMarshaller {
 
     private static ObjectMapper objectMapper;
+
     public void marshaller(Object object, OutputStream outputStream) {
         try {
             JsonGenerator jsonGenerator = getObjectMapper().getJsonFactory().createJsonGenerator(outputStream, JsonEncoding.UTF8);
@@ -42,8 +44,10 @@ public class JacksonJsonRopMarshaller implements RopMarshaller {
             AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
             SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
             serializationConfig = serializationConfig.without(SerializationConfig.Feature.WRAP_ROOT_VALUE)
-                                                     .with(SerializationConfig.Feature.INDENT_OUTPUT)
-                                                     .withAnnotationIntrospector(introspector);
+                    .with(SerializationConfig.Feature.INDENT_OUTPUT)
+                    .withSerializationInclusion(JsonSerialize.Inclusion.NON_NULL)
+                    .withSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY)
+                    .withAnnotationIntrospector(introspector);
             objectMapper.setSerializationConfig(serializationConfig);
             this.objectMapper = objectMapper;
         }

@@ -27,10 +27,15 @@ public class Address {
     @XmlAttribute
     private String doorCode;
 
-
+    /**
+     * 在请求属性的属性类中，你可以使用接口的集合
+     */
     @XmlElementWrapper(name = "streets")
     @XmlElement(name = "street")
     private List<Street> streets;
+
+    @XmlElementWrapper(name = "codes")
+    private String[] codes;
 
     public String getZoneCode() {
         return zoneCode;
@@ -54,6 +59,14 @@ public class Address {
 
     public void setStreets(List<Street> streets) {
         this.streets = streets;
+    }
+
+    public String[] getCodes() {
+        return codes;
+    }
+
+    public void setCodes(String[] codes) {
+        this.codes = codes;
     }
 }
 

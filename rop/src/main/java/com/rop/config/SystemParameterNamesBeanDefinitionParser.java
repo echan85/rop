@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-5
  */
 package com.rop.config;
@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
  * @version 1.0
  */
 public class SystemParameterNamesBeanDefinitionParser implements BeanDefinitionParser {
-    @Override
+
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         String appKey = element.getAttribute("appkey-param-name");
         String sessionId = element.getAttribute("sessionid-param-name");
@@ -28,6 +28,7 @@ public class SystemParameterNamesBeanDefinitionParser implements BeanDefinitionP
         String format = element.getAttribute("format-param-name");
         String locale = element.getAttribute("locale-param-name");
         String sign = element.getAttribute("sign-param-name");
+        String jsonp = element.getAttribute("jsonp-param-name");
 
         if (StringUtils.hasText(appKey)) {
             SystemParameterNames.setAppKey(appKey);
@@ -49,6 +50,9 @@ public class SystemParameterNamesBeanDefinitionParser implements BeanDefinitionP
         }
         if (StringUtils.hasText(sessionId)) {
             SystemParameterNames.setSign(sign);
+        }
+        if (StringUtils.hasText(jsonp)) {
+            SystemParameterNames.setJsonp(jsonp);
         }
         return null;
     }

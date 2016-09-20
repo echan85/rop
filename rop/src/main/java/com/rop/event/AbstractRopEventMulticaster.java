@@ -1,5 +1,5 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-2
  */
 package com.rop.event;
@@ -21,17 +21,17 @@ public abstract class AbstractRopEventMulticaster implements RopEventMulticaster
     private static final Map<Class<? extends RopEvent>, ListenerRegistry> cachedRopEventListeners =
             new HashMap<Class<? extends RopEvent>, ListenerRegistry>();
 
-    @Override
+
     public void removeAllRopListeners() {
         ropEventListeners.clear();
     }
 
-    @Override
+
     public void addRopListener(RopEventListener listener) {
         ropEventListeners.add(listener);
     }
 
-    @Override
+
     public void removeRopListener(RopEventListener listener) {
         ropEventListeners.remove(listener);
     }

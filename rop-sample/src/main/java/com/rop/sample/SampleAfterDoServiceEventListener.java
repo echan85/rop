@@ -10,6 +10,8 @@ import com.rop.event.AfterDoServiceEvent;
 import com.rop.event.RopEventListener;
 import com.rop.marshaller.MessageMarshallerUtils;
 
+import java.util.Map;
+
 /**
  * <pre>
  * 功能说明：
@@ -20,17 +22,17 @@ import com.rop.marshaller.MessageMarshallerUtils;
  */
 public class SampleAfterDoServiceEventListener implements RopEventListener<AfterDoServiceEvent> {
 
-    @Override
+
     public void onRopEvent(AfterDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
-        if(ropRequestContext != null && ropRequestContext.getRopRequest() != null){
-            RopRequest ropRequest = ropRequestContext.getRopRequest();
-            String message = MessageMarshallerUtils.asUrlString(ropRequest);
+        if(ropRequestContext != null){
+            Map<String,String> allParams = ropRequestContext.getAllParams();
+            String message = MessageMarshallerUtils.asUrlString(allParams);
             System.out.println("message("+ropEvent.getServiceEndTime()+")"+message);
         }
     }
 
-    @Override
+
     public int getOrder() {
         return 0;
     }

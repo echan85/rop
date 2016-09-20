@@ -1,10 +1,11 @@
 /**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
+ * 版权声明： 版权所有 违者必究 2012
  * 日    期：12-6-7
  */
 package com.rop.impl;
 
 import com.rop.Interceptor;
+import com.rop.RopException;
 import com.rop.ThreadFerry;
 import com.rop.config.InterceptorHolder;
 import com.rop.config.RopEventListenerHodler;
@@ -22,6 +23,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -57,9 +60,11 @@ public class AnnotationServletServiceRouterFactoryBean
 
     private String extErrorBasename;
 
+    private String[] extErrorBasenames;
+
     private int serviceTimeoutSeconds = -1;
 
-    private Class<? extends ThreadFerry> threadFerryClass;
+    private Class<? extends ThreadFerry> threadFerryClass = DumbThreadFerry.class;
 
     private FormattingConversionService formattingConversionService;
 
@@ -71,28 +76,28 @@ public class AnnotationServletServiceRouterFactoryBean
     //单位为K，默认为10M
     private int uploadFileMaxSize = 10 * 1024;
 
-    @Override
+
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
 
-    @Override
+
     public void destroy() throws Exception {
         serviceRouter.shutdown();
     }
 
-    @Override
+
     public Class<?> getObjectType() {
         return AnnotationServletServiceRouter.class;
     }
 
-    @Override
+
     public AnnotationServletServiceRouter getObject() throws Exception {
         return this.serviceRouter;
     }
 
-    @Override
+
     public boolean isSingleton() {
         return true;
     }
@@ -105,15 +110,36 @@ public class AnnotationServletServiceRouterFactoryBean
         this.threadFerryClass = threadFerryClass;
     }
 
-    @Override
+    public void setThreadFerryClassName(String threadFerryClassName) {
+        try {
+            if (StringUtils.hasText(threadFerryClassName)) {
+                Class<?> threadFerryClass =
+                        ClassUtils.forName(threadFerryClassName, getClass().getClassLoader());
+                if (!ClassUtils.isAssignable(ThreadFerry.class, threadFerryClass)) {
+                    throw new RopException(threadFerryClassName + "没有实现"
+                                         + ThreadFerry.class.getName() + "接口");
+                }
+                this.threadFerryClass = (Class<? extends ThreadFerry>)threadFerryClass;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+
     public void afterPropertiesSet() throws Exception {
         //实例化一个AnnotationServletServiceRouter
         serviceRouter = new AnnotationServletServiceRouter();
 
-        //设置属性
+        //设置国际化错误资源
         if (extErrorBasename != null) {
             serviceRouter.setExtErrorBasename(extErrorBasename);
         }
+
+        if (extErrorBasenames != null) {
+            serviceRouter.setExtErrorBasenames(extErrorBasenames);
+        }
+
         DefaultSecurityManager securityManager = BeanUtils.instantiate(DefaultSecurityManager.class);
 
         securityManager.setSessionManager(sessionManager);
@@ -138,7 +164,7 @@ public class AnnotationServletServiceRouterFactoryBean
                 serviceRouter.addInterceptor(interceptor);
             }
             if (logger.isInfoEnabled()) {
-                logger.info("共注册了" + interceptors.size() + "拦截器.");
+                logger.info("register total {} interceptors",interceptors.size());
             }
         }
 
@@ -149,7 +175,7 @@ public class AnnotationServletServiceRouterFactoryBean
                 serviceRouter.addListener(listener);
             }
             if (logger.isInfoEnabled()) {
-                logger.info("共注册了" + listeners.size() + "事件监听器.");
+                logger.info("register total {} listeners",listeners.size());
             }
         }
 
@@ -161,8 +187,7 @@ public class AnnotationServletServiceRouterFactoryBean
     }
 
     private DefaultFileUploadController buildFileUploadController() {
-        Assert.notNull(this.uploadFileTypes, "允许上传的文件类型不能为空");
-        Assert.isTrue(this.uploadFileMaxSize > 0);
+        Assert.notNull(this.uploadFileTypes, "Please set the updateFileTypes,if all,set *");
         if(ALL_FILE_TYPES.equals(uploadFileTypes.trim())){
             return new DefaultFileUploadController(this.uploadFileMaxSize);
         }else {
@@ -229,6 +254,10 @@ public class AnnotationServletServiceRouterFactoryBean
 
     public void setExtErrorBasename(String extErrorBasename) {
         this.extErrorBasename = extErrorBasename;
+    }
+
+    public void setExtErrorBasenames(String[] extErrorBasenames) {
+        this.extErrorBasenames = extErrorBasenames;
     }
 
     public void setServiceTimeoutSeconds(int serviceTimeoutSeconds) {
